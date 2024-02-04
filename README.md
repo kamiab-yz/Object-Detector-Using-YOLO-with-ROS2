@@ -1,5 +1,7 @@
 # Object Detector Using YOLO with ROS2
 This README details the functionality of ROS2 nodes that integrate OpenCV for camera operations and harness a pre-trained YOLO model for object detection tasks. The nodes accept an object and a location as ROS parameters, highlight these elements within the camera feed by drawing rectangles, and subsequently publish the pixel coordinates of these regions to a distinct ROS topic.
+
+![image](https://github.com/kamiab-yz/Object-Detector-Using-YOLO-with-ROS2/assets/83370141/341e770f-b9d2-4a1d-9cef-fe494f5e0a26)
 ## Dependencies
 
 This project requires the following dependencies to be installed:
@@ -82,5 +84,6 @@ As a demo you can also run another node which detect all the detectable objects 
 ```
 ros2 run vision_pkg image_subscriber
 ```
+
 
 
