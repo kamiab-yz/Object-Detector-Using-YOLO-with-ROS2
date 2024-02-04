@@ -47,6 +47,8 @@ source ~/your_ws_name/install/setup.bash
 ```
 or add this line in your **.bashrc** file.
 
+You should also change the path of **coco.txt** file both in **image_subscriber_node.py** and **obj_place_detector_node.py** with respect to your workspace.
+
 ## Run the launch file
 In you terminal:
 ```
