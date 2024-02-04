@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 
 """
 @Author: Kamyab Yazdipaz
 """
 
-import rclpy                            # ROS2 Python interface library
-from rclpy.node import Node             # ROS2 Node class
-from sensor_msgs.msg import Image       # Image message type
-from cv_bridge import CvBridge          # Class for converting images between ROS and OpenCV
-import cv2                              # OpenCV library for image processing
-import numpy as np                      # Python library for numerical computations
+import rclpy                            
+from rclpy.node import Node             
+from sensor_msgs.msg import Image       
+from cv_bridge import CvBridge          
+import cv2                              
+import numpy as np                      
 import random
 from ultralytics import YOLO
 
 # opening the file in read mode
 my_file = open("/home/kamiab/vision_ws/src/vision_pkg/vision_pkg/utils/coco.txt", "r")
 
-# reading the file
+
 data = my_file.read()
 # replacing end splitting the text | when newline ('\n') is seen.
 class_list = data.split("\n")
@@ -46,10 +46,10 @@ Create a subscriber node
 """
 class ImageSubscriber(Node):
     def __init__(self, name):
-        super().__init__(name)                                  # Initialize the parent class of the ROS2 node
+        super().__init__(name)                                 
         self.sub = self.create_subscription(
-            Image, 'image_raw', self.listener_callback, 10)     # Create a subscriber object (message type, topic name, subscriber callback function, queue length)
-        self.cv_bridge = CvBridge()                             # Create an image conversion object for converting between OpenCV images and ROS image messages
+            Image, 'image_raw', self.listener_callback, 10)     
+        self.cv_bridge = CvBridge()                             
 
     def object_detect(self, image):
         #  resize the frame | small frame optimise the run
@@ -97,20 +97,20 @@ class ImageSubscriber(Node):
         # Display the resulting frame
 
         
-        cv2.imshow("object", image)                             # Display the processed image with OpenCV
+        cv2.imshow("object", image)                             
         cv2.waitKey(10)
 
 
 
     def listener_callback(self, data):
-        self.get_logger().info('Receiving video frame')         # Log output indicating entry into the callback function
-        image = self.cv_bridge.imgmsg_to_cv2(data, 'bgr8')      # Convert the ROS image message to an OpenCV image
-        self.object_detect(image)                               # Detect apple
+        self.get_logger().info('Receiving video frame')         
+        image = self.cv_bridge.imgmsg_to_cv2(data, 'bgr8')      
+        self.object_detect(image)                              
 
 
-def main(args=None):                                        # Main function for ROS2 node entry point
-    rclpy.init(args=args)                                   # Initialize the ROS2 Python interface
-    node = ImageSubscriber("topic_webcam_sub")              # Create and initialize a ROS2 node object
-    rclpy.spin(node)                                        # Loop and wait for ROS2 to exit
-    node.destroy_node()                                     # Destroy the node object
-    rclpy.shutdown()                                        # Close the ROS2 Python interface
+def main(args=None):                                      
+    rclpy.init(args=args)                                  
+    node = ImageSubscriber("topic_webcam_sub")             
+    rclpy.spin(node)                                        
+    node.destroy_node()                                    
+    rclpy.shutdown()                                        

@@ -5,21 +5,21 @@
 @Author: Kamyab Yazdipaz
 """
 
-import rclpy                            # ROS2 Python interface library
-from rclpy.node import Node             # ROS2 Node class
+import rclpy                            
+from rclpy.node import Node            
 from sensor_msgs.msg import Image       # Image message type
 from cv_bridge import CvBridge          # Class for converting images between ROS and OpenCV
-import cv2                              # OpenCV library for image processing
-import numpy as np                      # Python library for numerical computations
+import cv2                              
+import numpy as np                      
 import random
 from ultralytics import YOLO
-from my_custom_interfaces.msg import ObjPlaceLoc
+from my_custom_interfaces.msg import ObjPlaceLoc #Custom message Interface
 
 
 # opening the file in read mode
-my_file = open("/home/kamiab/vision_ws/src/vision_pkg/vision_pkg/utils/coco.txt", "r")
+my_file = open("/home/kamiab/vision_ws/src/vision_pkg/vision_pkg/utils/coco.txt", "r") #TODO: change it to your file path
 
-# reading the file
+
 data = my_file.read()
 # replacing end splitting the text | when newline ('\n') is seen.
 class_list = data.split("\n")
@@ -43,23 +43,21 @@ frame_wid = 640
 frame_hyt = 480
 
 
-"""
-Create a subscriber node
-"""
+
 class ImageSubscriber(Node):
     def __init__(self, name):
-        super().__init__(name)                                  # Initialize the parent class of the ROS2 node
+        super().__init__(name)                                  
         
         self.declare_parameter("object_name", "bottle")         # Declare the parameter for object and it's place
-        self.declare_parameter("place_name", "book")
+        self.declare_parameter("place_name", "chair")
 
         self.obj_name_ = self.get_parameter("object_name").value        # Get the parameters
         self.place_name_ =self.get_parameter("place_name").value
 
         self.obj_place_info_publisher_ = self.create_publisher(ObjPlaceLoc, "obj_place_info", 10)
         self.sub = self.create_subscription(
-            Image, 'image_raw', self.listener_callback, 10)     # Create a subscriber object (message type, topic name, subscriber callback function, queue length)
-        self.cv_bridge = CvBridge()                             # Create an image conversion object for converting between OpenCV images and ROS image messages
+            Image, 'image_raw', self.listener_callback, 10)     
+        self.cv_bridge = CvBridge()                             
     
     
     def publish_obj_place_info(self, object_name, obj_c_x, obj_c_y, place_name, place_c_x, place_c_y):
@@ -152,12 +150,12 @@ class ImageSubscriber(Node):
     def listener_callback(self, data):
         self.get_logger().info('Receiving video frame')         # Log output indicating entry into the callback function
         image = self.cv_bridge.imgmsg_to_cv2(data, 'bgr8')      # Convert the ROS image message to an OpenCV image
-        self.detect_obj_place(image)                               # Detect apple
+        self.detect_obj_place(image)                               
 
 
-def main(args=None):                                        # Main function for ROS2 node entry point
-    rclpy.init(args=args)                                   # Initialize the ROS2 Python interface
-    node = ImageSubscriber("topic_webcam_sub")              # Create and initialize a ROS2 node object
-    rclpy.spin(node)                                        # Loop and wait for ROS2 to exit
-    node.destroy_node()                                     # Destroy the node object
-    rclpy.shutdown()                                        # Close the ROS2 Python interface
+def main(args=None):                                        
+    rclpy.init(args=args)                                   
+    node = ImageSubscriber("topic_webcam_sub")              
+    rclpy.spin(node)                                        
+    node.destroy_node()                                    
+    rclpy.shutdown()                                        
